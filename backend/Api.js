@@ -79,13 +79,30 @@ app.post('/register', (req, res) => {
     if(!user){     
      res.status(403).send('Wrong credentials');    
      }else { 
-        const authToken = Math.random().toString();    
-        res.cookie('authToken', authToken);    
-        res.json({ message: "Login successful", authToken });    
+        const token = jwt.sign({email},secret);    
+        //res.cookie('authToken', authToken); 
+           
+        res.json({ message: "Login successful", token }); 
+        console.log(token)
+           
     }    
      });
 
-
+ // midle
+ const authenticate = (req, res, next) => {
+  const headerToken = req.headers.authorization;
+  if (!headerToken) {
+     return res.status(401).json({ message: 'Authorization header missing' });
+  }
+  const token = headerToken.split(' ')[1];
+  try {
+     const decodedToken = jwt.verify(token, secret);
+     req.user = decodedToken;
+     next();
+  } catch (error) {
+     return res.status(401).json({ message: 'Invalid token' });
+  }
+};
 
 
 
@@ -95,7 +112,7 @@ app.post('/register', (req, res) => {
 
 
 
-app.get('/get-products', (req, res) => {
+app.get('/get-products',  (req, res) => {
     let client =dbconfig.Client
     function callback(err, result) {
         if (err) {
@@ -123,7 +140,7 @@ app.get('/get_product/:id', (req, res) => {
         
 });
 
-app.post('/Ajoutproduct', (req, res) => {
+app.post('/Ajoutproduct', authenticate, (req, res) => {
     let client =dbconfig.Client
     let { name, description, price, stock } = req.body;
     
@@ -138,7 +155,7 @@ app.post('/Ajoutproduct', (req, res) => {
 });
 
 
-app.put('/Updateproducts/:id', (req, res) => {
+app.put('/Updateproducts/:id', authenticate, (req, res) => {
     let client=dbconfig.Client;
     let id = req.params.id;
     let { name, description, price, stock } = req.body;
@@ -154,7 +171,7 @@ app.put('/Updateproducts/:id', (req, res) => {
       
 });
 
-app.delete('/Deleteproduct/:id', (req, res) => {
+app.delete('/Deleteproduct/:id',authenticate, (req, res) => {
     let client=dbconfig.Client 
     let id = req.params.id;
     requettes.deleteProduct(id,client, (error, data) => {

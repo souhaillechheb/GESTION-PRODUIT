@@ -1,32 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
  const [email, setEmail] = useState('');
  const [password, setPassword] = useState('');
- const navigate = useNavigate();
-
+ const navigate = useNavigate(); 
+ const token = localStorage.getItem('token');
  function handleSubmit (event) {
      event.preventDefault();
      let data={
      email : email,
      password :password
      }
-
+    
+     
         fetch("http://localhost:5000/login", {
+        
         method: "POST",
         body: JSON.stringify(data),
          headers: {
-        'Content-Type': 'application/json'
+         'Content-Type': 'application/json'
+         
          },
             
         })
         .then((response) => response.json())
         .then((data) => {if(data.message=== "Login successful"){
+                localStorage.setItem('token', data.token);
                                 navigate("/Allproducts");
                          }                         
         })
+        
         .catch((error) => alert("login ou mot de passe erroné "));
         
 

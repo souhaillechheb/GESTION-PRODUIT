@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
  const [newRegister, setNewRegister] = useState({
-  firstname:'',
-  lastname:'',
+  nom:'',
+  prenom:'',
   email:'',
   password:'',
 });
@@ -13,18 +13,28 @@ const navigate = useNavigate();
 
 function handleAjouter(event){    
     event.preventDefault();
+    console.log(newRegister)
   fetch("http://localhost:5000/register", {
     method: 'POST',
-    body: JSON.stringify({newRegister}), 
-    
-    headers: {
+    body: JSON.stringify(newRegister), 
+     headers: {
      'Content-Type': 'application/json',
     },
   })
- .then((response) => response.json())
- .then((data) => console.log(data))
- .catch((error) => console.log(error));
-  navigate("/login");
+  .then((response) => response.json())
+
+ .then((data) => {
+ if(data.message==="User OK"){
+alert("User Added successfully")
+navigate("/login");
+ console.log(data.message);
+ }else{
+alert("Email already registered")
+ }
+ }) 
+.catch((error) => console.error(error));
+
+  
 }
 
 return(  

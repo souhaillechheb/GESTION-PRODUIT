@@ -4,6 +4,7 @@ function AddProduct( props ) {
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState()
   const [stock, setStock] = useState(false)
+  const token = localStorage.getItem('token');
 
   function handleSubmit(event) {    
     event.preventDefault();
@@ -12,6 +13,7 @@ function AddProduct( props ) {
         body: JSON.stringify({ name, description,price,stock }),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
       })
         .then((response) => response.json())
@@ -57,7 +59,7 @@ function AddProduct( props ) {
               onChange={(event) => setStock(event.target.checked)}
             />
           </label>
-          <button type="submit">Enregistrer l'ajout</button>
+          {token &&<button type="submit">Enregistrer l'ajout</button>}
         </form>
       );
 }

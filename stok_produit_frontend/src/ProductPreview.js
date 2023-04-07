@@ -1,6 +1,6 @@
 import { Children } from "react";
 import AddProduct from "./Addproduct";
-
+const token = localStorage.getItem('token');
 
 
 function ProductPreview(props){
@@ -9,7 +9,8 @@ function ProductPreview(props){
         fetch(`http://localhost:5000/Deleteproduct/`+props.produit.id, {
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
       })
       
@@ -26,8 +27,8 @@ function ProductPreview(props){
                     <td>{props.produit.description}</td>                            
                     <td>{props.produit.price}</td>                      
                     <td>{props.produit.stock ?"en stock": "pas en stock" }</td> 
-                    <td><input type= {"submit"} value={"modifier"} onClick={()=>props.setProductModifie(props.produit)  } /></td>
-                    <td><input type= {"submit"} value={"supprimer"} onClick={handleDelete} /> </td>
+                   {token && <td><input type= {"submit"} value={"modifier"} onClick={()=>props.setProductModifie(props.produit)  } /></td>}
+                    {token && <td><input type= {"submit"} value={"supprimer"} onClick={handleDelete} /> </td>}
                     
                 </tr>
                   
