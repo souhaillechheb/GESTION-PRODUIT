@@ -112,7 +112,7 @@ app.post('/register', (req, res) => {
 
 
 
-app.get('/get-products', authenticate, (req, res) => {
+app.get('/get-products', (req, res) => {
     let client =dbconfig.Client
     function callback(err, result) {
         if (err) {
