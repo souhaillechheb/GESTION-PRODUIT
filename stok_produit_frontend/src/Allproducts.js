@@ -7,12 +7,13 @@ function Allproducts(props){
 const [products,setProducts]=useState([])
 const [productModifie,setProductModifie]=useState(null)
 const [rechercher, setRechercher] = useState('');
-//const token = localStorage.getItem('token');
+const token = localStorage.getItem('token');
  function getAll(){
   fetch("http://localhost:5000/get-products",{
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
               
             },
  })          
@@ -42,7 +43,7 @@ const [rechercher, setRechercher] = useState('');
                   <th>description</th>
                   <th>price</th>
                   <th>stock</th>
-                  <th colSpan={"2"}> manipulation </th>
+                 {token && <th colSpan={"2"}> manipulation </th>}
                   </tr>
             </thead>
             <tbody>           

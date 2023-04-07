@@ -25,7 +25,8 @@ function Login() {
             
         })
         .then((response) => response.json())
-        .then((data) => {if(data.message=== "Login successful"){
+        .then((data) => {if(data.token){
+                console.log(data.token)
                 localStorage.setItem('token', data.token);
                                 navigate("/Allproducts");
                          }                         
