@@ -13,7 +13,7 @@ const [rechercher, setRechercher] = useState('');
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
+              
               
             },
  })          
